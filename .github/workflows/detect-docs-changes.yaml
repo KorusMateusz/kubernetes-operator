@@ -13,6 +13,7 @@ jobs:
 
       - name: Detect changes and upload an artifact
         run: |
+          git fetch origin master
           git diff master... website
           mkdir ${{ github.workspace }}/artifact/docs_build_flags
           if [[ $(git diff master... website) ]]; then
