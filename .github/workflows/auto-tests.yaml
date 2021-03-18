@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
-    branches:
-      - master
 jobs:
   run-tests:
     if: github.event.pull_request.draft == false
