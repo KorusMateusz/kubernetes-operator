@@ -13,9 +13,9 @@ jobs:
 
       - name: Detect changes and upload an artifact
         run: |
-          git diff master HEAD website
+          git diff master... website
           mkdir ${{ github.workspace }}/artifact/docs_build_flags
-          if [[ $(git diff master HEAD website) ]]; then
+          if [[ $(git diff master... website) ]]; then
             echo "Changes in docs detected"
             touch ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
             ls ${{ github.workspace }}/artifact/docs_build_flags
