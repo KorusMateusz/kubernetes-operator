@@ -10,20 +10,19 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
 
       - name: Detect changes and upload an artifact
         run: |
           git fetch origin master
           git diff origin/master website
-          mkdir ${{ github.workspace }}/docs_build_flags
+          mkdir ${{ github.workspace }}/artifacts/docs_build_flags
+          ls ${{ github.workspace }}/artifacts/docs_build_flags
           if [[ $(git diff origin/master website) ]]; then
             echo "Changes in docs detected"
-            touch ${{ github.workspace }}/docs_build_flags/${{ github.event.number }}
-            ls ${{ github.workspace }}/docs_build_flags
+            touch ${{ github.workspace }}/docs_build_flags/artifacts/${{ github.event.number }}
+            ls ${{ github.workspace }}/docs_build_flags/artifacts
           else
             echo "No changes in docs"
-            rm ${{ github.workspace }}/docs_build_flags/${{ github.event.number }} || echo "No flag to delete"
-            ls ${{ github.workspace }}/docs_build_flags
+            rm ${{ github.workspace }}/docs_build_flags/artifacts/${{ github.event.number }} || echo "No flag to delete"
+            ls ${{ github.workspace }}/docs_build_flags/artifacts
           fi
