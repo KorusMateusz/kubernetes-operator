@@ -11,10 +11,13 @@ jobs:
 
       - name: Detect changes and upload an artifact
         run: |
-        if [[ $(git diff website) ]]; then
-          echo "Changes in docs detected"
-          touch ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
-        else
-          echo "No changes in docs"
-          rm ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
-        fi
+          if [[ $(git diff website) ]]; then
+            echo "Changes in docs detected"
+            mkdir ${{ github.workspace }}/artifact/docs_build_flags
+            touch ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
+            ls ${{ github.workspace }}/artifact/docs_build_flags
+          else
+            echo "No changes in docs"
+            rm ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
+            ls ${{ github.workspace }}/artifact/docs_build_flags
+          fi
