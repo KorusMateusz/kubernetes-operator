@@ -16,7 +16,7 @@ jobs:
       - name: Detect changes and upload an artifact
         run: |
           git fetch origin master
-          git diff origin/master... website
+          git diff origin/master website
           mkdir ${{ github.workspace }}/docs_build_flags
           if [[ $(git diff master... website) ]]; then
             echo "Changes in docs detected"
