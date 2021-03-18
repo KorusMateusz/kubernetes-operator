@@ -18,7 +18,7 @@ jobs:
           git fetch origin master
           git diff origin/master website
           mkdir ${{ github.workspace }}/docs_build_flags
-          if [[ $(git diff master website) ]]; then
+          if [[ $(git diff origin/master website) ]]; then
             echo "Changes in docs detected"
             touch ${{ github.workspace }}/docs_build_flags/${{ github.event.number }}
             ls ${{ github.workspace }}/docs_build_flags
