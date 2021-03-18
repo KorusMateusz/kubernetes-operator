@@ -20,10 +20,10 @@ jobs:
           mkdir ${{ github.workspace }}/artifact/docs_build_flags
           if [[ $(git diff master... website) ]]; then
             echo "Changes in docs detected"
-            touch ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
-            ls ${{ github.workspace }}/artifact/docs_build_flags
+            touch ${{ github.workspace }}/docs_build_flags/${{ github.event.number }}
+            ls ${{ github.workspace }}/docs_build_flags
           else
             echo "No changes in docs"
-            rm ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }} || echo "No flag to delete"
-            ls ${{ github.workspace }}/artifact/docs_build_flags
+            rm ${{ github.workspace }}/docs_build_flags/${{ github.event.number }} || echo "No flag to delete"
+            ls ${{ github.workspace }}/docs_build_flags
           fi
