@@ -1,0 +1,20 @@
+name: Detect docs changes
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    branches:
+      - master
+jobs:
+  run-tests:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Detect changes and upload an artifact
+        run: |
+        if [[ $(git diff website) ]]; then
+          echo "Changes in docs detected"
+          touch ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
+        else
+          echo "No changes in docs"
+          rm ${{ github.workspace }}/artifact/docs_build_flags/${{ github.event.number }}
+        fi
