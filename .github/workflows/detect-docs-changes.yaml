@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   run-tests:
-    - steps:
+    steps:
       - name: Check out code
         uses: actions/checkout@v2
 
