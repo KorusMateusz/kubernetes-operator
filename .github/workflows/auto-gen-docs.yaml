@@ -6,7 +6,6 @@ on:
     types: [ closed ]
     branches:
       - master
-  workflow_dispatch:
 
 jobs:
   # Set the job key. The key is displayed as the job name
@@ -19,35 +18,34 @@ jobs:
 
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Download doc pr flag
+       uses: actions/download-artifact@v2
+         with:
+          name: doc_flag_pr_${{ github.event.number }}
+
+      # Copy flag to env variable, because there's no early return in workfolws
+      - name: Copy flag to GITHUB_ENV
+        run: echo "DOCS_CHANGED=$(cat doc_flag_pr_${{ github.event.number }})" >> $GITHUB_ENV
+
+      # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
+        if: env.DOCS_CHANGED == 'true'
         uses: actions/checkout@v2
         with:
           submodules: recursive  # Fetch the Docsy theme
           fetch-depth: 0
 
-      # Checks out a copy of your repository on the ubuntu-latest machine
-      - name: Check for changes
-        run: |
-          echo ${{ github.event.number }}
-          echo ${{ github.event.before }}
-          echo ${{ github.sha }}
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E "^website*"; then
-            git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E "^website*"
-            echo "IS_CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E "^website*")" >> $GITHUB_ENV
-          else
-            echo "IS_CHANGED=empty" >> $GITHUB_ENV
-          fi
 
       # Sets up node - required by Hugo
       - name: Setup Node
-        if: env.IS_CHANGED != 'empty'
+        if: env.DOCS_CHANGED == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
 
       # Installs dependencies required by docsy theme
       - name: Install docsy dependencies
-        if: env.IS_CHANGED != 'empty'
+        if: env.DOCS_CHANGED == 'true'
         run: |
           cd website
           npm install
@@ -55,9 +53,10 @@ jobs:
           sudo npm install -D --save autoprefixer
           sudo npm install -D --save postcss-cli
           cd ../
+
       # Runs makefile goal - checks changes to /website folder and generates docs
       - name: Run Makefile goal
-        if: env.IS_CHANGED != 'empty'
+        if: env.DOCS_CHANGED == 'true'
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,11 +64,11 @@ jobs:
 
       # Create push request with generated docs
       - name: Create Pull Request
-        if: env.IS_CHANGED != 'empty'
+        if: env.DOCS_CHANGED == 'true'
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Auto-updated docs
           branch: docs-generator
           title: Auto-generated docs update
           body: |
-            Auto generated docs from master commit ${{ github.sha }}
+            Auto generated docs from PR ${{ github.event.number }}
