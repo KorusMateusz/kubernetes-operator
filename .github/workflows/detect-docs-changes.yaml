@@ -25,14 +25,14 @@ jobs:
           fi
 
       - name: Upload artifact flag
-        if: env.IS_CHANGED == 'true' || true
+        if: env.IS_CHANGED == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: doc_flag_pr_${{ github.event.number }}
           path: ${{ github.event.number }}
 
       - name: Remove artifact flag
-        if: env.IS_CHANGED != 'true' || true
+        if: env.IS_CHANGED != 'true'
         uses: geekyeggo/delete-artifact@v1
         with:
           name: doc_flag_pr_${{ github.event.number }}
