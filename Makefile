@@ -495,6 +495,7 @@ bundle: manifests operator-sdk kustomize
 bundle-build:
 	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
+
 # Download kubebuilder
 kubebuilder:
 	mkdir -p ${ENVTEST_ASSETS_DIR}
