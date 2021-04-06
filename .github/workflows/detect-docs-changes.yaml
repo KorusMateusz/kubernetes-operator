@@ -5,7 +5,7 @@ on:
     branches:
       - master
 jobs:
-  run-tests:
+  detect-doc-changes:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
