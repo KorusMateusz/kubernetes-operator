@@ -2,9 +2,10 @@ name: auto-generate-docs
 
 # Run this workflow every time a new commit pushed to your repository
 on:
-  push:
-     branches:
-       - master
+  pull_request:
+    types: [ closed ]
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
