@@ -15,7 +15,7 @@ jobs:
     name: auto-generate-docs
     # Set the type of machine to run on
     runs-on: ubuntu-latest
-    if: {{ github.event.pull_request.merged }} == 'true'
+    if: github.event.pull_request.merged == true
 
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
