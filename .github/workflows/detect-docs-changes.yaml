@@ -15,14 +15,25 @@ jobs:
         run: |
           git fetch origin master
           git diff origin/master website
-          mkdir ${{ github.workspace }}/artifacts/docs_build_flags
-          ls ${{ github.workspace }}/artifacts/docs_build_flags
           if [[ $(git diff origin/master website) ]]; then
             echo "Changes in docs detected"
-            touch ${{ github.workspace }}/docs_build_flags/artifacts/${{ github.event.number }}
-            ls ${{ github.workspace }}/docs_build_flags/artifacts
+            touch ${{ github.event.number }}
+            echo "IS_CHANGED=true" >> $GITHUB_ENV
           else
             echo "No changes in docs"
-            rm ${{ github.workspace }}/docs_build_flags/artifacts/${{ github.event.number }} || echo "No flag to delete"
-            ls ${{ github.workspace }}/docs_build_flags/artifacts
+            echo "IS_CHANGED=false" >> $GITHUB_ENV
           fi
+
+      - name: Upload artifact flag
+        if: env.IS_CHANGED == 'true' || true
+        uses: actions/upload-artifact@v2
+        with:
+          name: doc_flag_pr_${{ github.event.number }}
+          path: ${{ github.event.number }}
+
+      - name: Remove artifact flag
+        if: env.IS_CHANGED != 'true' && false
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: doc_flag_pr_${{ github.event.number }}
+          failOnError: false

@@ -20,6 +20,11 @@ jobs:
           submodules: recursive  # Fetch the Docsy theme
           fetch-depth: 0
 
+      - name: Download a single artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Check for changes
         run: |
@@ -31,13 +36,6 @@ jobs:
           else
             echo "IS_CHANGED=empty" >> $GITHUB_ENV
           fi
-      # Sets up the appropriate version of Hugo
-      - name: Setup Hugo
-        if: env.IS_CHANGED != 'empty'
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.62.2'
-          extended: true
 
       # Sets up node - required by Hugo
       - name: Setup Node
