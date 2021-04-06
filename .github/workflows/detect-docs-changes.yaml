@@ -17,11 +17,10 @@ jobs:
           git diff origin/master website
           if [[ $(git diff origin/master website) ]]; then
             echo "Changes in docs detected"
-            touch ${{ github.event.number }}
-            echo "IS_CHANGED=true" >> $GITHUB_ENV
+            echo "true" > ${{ github.event.number }}
           else
             echo "No changes in docs"
-            echo "IS_CHANGED=false" >> $GITHUB_ENV
+            echo "false" > ${{ github.event.number }}
           fi
 
       - name: Upload artifact flag
@@ -30,10 +29,3 @@ jobs:
         with:
           name: doc_flag_pr_${{ github.event.number }}
           path: ${{ github.event.number }}
-
-      - name: Remove artifact flag
-        if: env.IS_CHANGED != 'true'
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: doc_flag_pr_${{ github.event.number }}
-          failOnError: false
