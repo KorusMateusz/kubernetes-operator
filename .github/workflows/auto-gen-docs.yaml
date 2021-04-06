@@ -20,8 +20,8 @@ jobs:
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Download doc pr flag
         uses: actions/download-artifact@v2
-          with:
-            name: doc_flag_pr_${{ github.event.number }}
+        with:
+          name: doc_flag_pr_${{ github.event.number }}
 
       # Copy flag to env variable, because there's no early return in workfolws
       - name: Copy flag to GITHUB_ENV
