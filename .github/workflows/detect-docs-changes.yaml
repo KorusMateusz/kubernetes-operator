@@ -17,14 +17,14 @@ jobs:
           git diff origin/master website
           if [[ $(git diff origin/master website) ]]; then
             echo "Changes in docs detected"
-            echo "true" > ${{ github.event.number }}
+            echo "true" > doc_flag
           else
             echo "No changes in docs"
-            echo "false" > ${{ github.event.number }}
+            echo "false" > doc_flag
           fi
 
       - name: Upload artifact flag
         uses: actions/upload-artifact@v2
         with:
           name: doc_flag_pr_${{ github.event.number }}
-          path: ${{ github.event.number }}
+          path: doc_flag

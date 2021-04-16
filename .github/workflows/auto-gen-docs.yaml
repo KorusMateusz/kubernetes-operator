@@ -26,7 +26,7 @@ jobs:
 
       # Copy flag to env variable, because there's no early return in workfolws
       - name: Copy flag to GITHUB_ENV
-        run: echo "DOCS_CHANGED=$(cat doc_flag_pr_${{ github.event.number }})" >> $GITHUB_ENV
+        run: echo "DOCS_CHANGED=$(cat doc_flag)" >> $GITHUB_ENV
 
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
