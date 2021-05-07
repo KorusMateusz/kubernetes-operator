@@ -358,16 +358,18 @@ bump-version: sembump ## Bump the version in the version file. Set BUMP to [ pat
 	@echo "Bumping VERSION.txt from $(VERSION) to $(NEW_VERSION)"
 	echo $(NEW_VERSION) > VERSION.txt
 	@echo "Updating version from $(VERSION) to $(NEW_VERSION) in README.md"
-	sed -i s/$(VERSION)/$(NEW_VERSION)/g README.md
-	sed -i s/$(VERSION)/$(NEW_VERSION)/g deploy/operator.yaml
-	sed -i s/$(VERSION)/$(NEW_VERSION)/g deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	sed -i.bak 's/$(VERSION)/$(NEW_VERSION)/g' README.md
+	sed -i.bak 's/$(VERSION)/$(NEW_VERSION)/g' deploy/operator.yaml
+	sed -i.bak 's/$(VERSION)/$(NEW_VERSION)/g' deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	rm */**.bak
+	rm *.bak
 	cp config/service_account.yaml deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
-	cat config/rbac/leader_election_role.yaml >> config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
-	cat config/rbac/leader_election_role_binding.yaml >> config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)=$(API_VERSION).yaml
-	cat config/rbac/role.yaml >> config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)=$(API_VERSION).yaml
-	cat config/rbac/role_binding.yaml >> config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
-	cat config/manager/manager.yaml >> config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
-	git add VERSION.txt README.md config/manager/manager.yaml config/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	cat config/rbac/leader_election_role.yaml >> deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	cat config/rbac/leader_election_role_binding.yaml >> deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)=$(API_VERSION).yaml
+	cat config/rbac/role.yaml >> deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)=$(API_VERSION).yaml
+	cat config/rbac/role_binding.yaml >> deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	cat config/manager/manager.yaml >> deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
+	git add VERSION.txt README.md config/manager/manager.yaml deploy/$(ALL_IN_ONE_DEPLOY_FILE_PREFIX)-$(API_VERSION).yaml
 	git commit -vaem "Bump version to $(NEW_VERSION)"
 	@echo "Run make tag to create and push the tag for new version $(NEW_VERSION)"
 
